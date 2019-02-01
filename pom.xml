@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>bean-post-processor-lesson</module>
+        <module>event-lesson</module>
     </modules>
 
     <properties>

@@ -38,12 +38,15 @@ public void refresh() throws BeansException, IllegalStateException {
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
+				// 初始化注册 SimpleApplicationEventMulticaster
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
+				// 空实现，子类继承实现
 				onRefresh();
 
 				// Check for listener beans and register them.
+				// 将 listeners 添加到 SimpleApplicationEventMulticaster中
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
@@ -51,6 +54,7 @@ public void refresh() throws BeansException, IllegalStateException {
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
+				// 初始化initLifecycleProcessor ，发布ContextRefreshedEvent事件
 				finishRefresh();
 			}
 ```
