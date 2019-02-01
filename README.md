@@ -47,6 +47,7 @@ public void refresh() throws BeansException, IllegalStateException {
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
+				// 非lasy的单例bean，实例化，getBean操作
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
@@ -58,6 +59,48 @@ public void refresh() throws BeansException, IllegalStateException {
 # `BeanPostProcessor`
 
 * 在实例化bean的时候调用
+
+* 参考`AbstractAutowireCapableBeanFactory` 的`doCreateBean`方法
+
+**过程** 
+1. `createBeanInstance`创建bean实例
+2. `populateBean`，对bean填充，属性填充，依赖注入
+3. `initializeBean`,执行`BeanPostProcessor`的方法，以及`InitializaitonBean`的方法，`init-method`方法
+
+```java
+protected Object doCreateBean(final String beanName, final RootBeanDefinition mbd, final Object[] args) {
+		// Instantiate the bean.
+		BeanWrapper instanceWrapper = null;
+		if (mbd.isSingleton()) {
+			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
+		}
+		if (instanceWrapper == null) {
+			instanceWrapper = createBeanInstance(beanName, mbd, args);
+		}
+		final Object bean = (instanceWrapper != null ? instanceWrapper.getWrappedInstance() : null);
+		Class<?> beanType = (instanceWrapper != null ? instanceWrapper.getWrappedClass() : null);
+
+		...
+
+		...
+
+		// Initialize the bean instance.
+		Object exposedObject = bean;
+		try {
+			populateBean(beanName, mbd, instanceWrapper);
+			if (exposedObject != null) {
+				exposedObject = initializeBean(beanName, exposedObject, mbd);
+			}
+		}
+		catch (Throwable ex) {
+			...
+		}
+		...
+		return exposedObject;
+	}
+```
+
+
 * 参考 `AbstractAutowireCapableBeanFactory` 的`initializeBean`方法
 
 **过程**
@@ -81,16 +124,14 @@ public void refresh() throws BeansException, IllegalStateException {
 
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
-			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
+//			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
 		try {
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
-			throw new BeanCreationException(
-					(mbd != null ? mbd.getResourceDescription() : null),
-					beanName, "Invocation of init method failed", ex);
+			...
 		}
 
 		if (mbd == null || !mbd.isSynthetic()) {
