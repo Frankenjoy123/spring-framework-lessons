@@ -11,6 +11,10 @@
     <modules>
         <module>bean-post-processor-lesson</module>
         <module>event-lesson</module>
+        <module>property-placeholder-configurer-lesson</module>
+        <module>namespace-handler-customer-tags</module>
+        <module>ComponentScanBeanDefinitionParser-lesson</module>
+        <module>aop-lesson</module>
     </modules>
 
     <properties>
@@ -38,8 +42,41 @@
                 <version>${spring-framework-version}</version>
             </dependency>
 
+            <!-- AspectJ -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>1.6.11</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.6.11</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>2.1</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 
 
 </project>
