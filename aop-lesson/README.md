@@ -271,5 +271,92 @@ DefaultAopProxyFactory.createAopProxy
 	}
 ```
 
+## AOP相关接口
+
+```
+Advised  -> Advisor
+
+MethodInteceptor
+
+```
+
+## CglibAopProxy类
+```
+org.springframework.cglib.proxy.MethodInterceptor接口
+    DynamicAdvisedInterceptor
+
+org.springframework.aop.ProxyMethodInvocation 接口
+    CglibMethodInvocation extends ReflectiveMethodInvocation
 
 
+```
+
+## execution 表达式
+
+```
+execution(* com.loongshawn.method.ces..*.*(..))
+```
+
+| 标识符                    | 含义                                          |      |
+| ------------------------- | --------------------------------------------- | ---- |
+| execution()               | 表达式的主体                                  |      |
+| 第一个“*”符号             | 表示返回值的类型任意                          |      |
+| com.loongshawn.method.ces | AOP所切的服务的包名，即，需要进行横切的业务类 |      |
+| 包名后面的“..”            | 表示当前包及子包                              |      |
+| 第二个“*”表示类名         | 即所有类                                      |      |
+| *(..)	表示任何方法名   | 括号表示参数，两个点表示任何参数类型          |      |
+
+```
+execution(modifiers-pattern? ret-type-pattern declaring-type-pattern?name-pattern(param-pattern) 
+throws-pattern?)
+```
+
+上述表达式结构是Spring官方文档说明，翻译为中文如下，其中除了返回类型模式、方法名模式和参数模式外，其它项都是可选的。
+
+```
+execution(<修饰符模式>?<返回类型模式><方法名模式>(<参数模式>)<异常模式>?)
+```
+
+```
+修饰符模式  public 可选
+返回值 必须  * 
+类  class 可选
+方法 必须 *
+参数 必须 ..
+异常模式 可选
+```
+
+> **execution**：用于匹配执行方法的连接点，是Spring AOP最主要的切入点指示符，execution表达式的格式如下：
+
+```
+execution(modifies-pattern?  ret-type-pattern  declaring-type-parttern?  name--pattern(parm-pattern)  throws-pattern?)
+```
+
+以上打了问号的都可以省略。
+
+> 上面格式中的execution是不变的，用于作为execution表达式的开头，整个表示式各个部分的解释为：
+
+> **modifies-pattern**：指定方法的修饰符，支持通配符，该部分可以省略。
+
+> **ret-type-pattern**：指定方法的返回值类型，支持通配符，可以使用“*”通配符来匹配所有返回值类型。
+
+> **declaring-type-parttern**：指定方法所属的类，支持通配符，该部分可以省略。
+
+> **name--pattern**：指定匹配指定方法名，支持通配符，可以使用“*”通配符来匹配所有方法。
+
+> **parm-pattern**：指定方法声明中的形参列表，支持两个通配符：“*”、“..”，其中*表示一个任意类型的参数，而“..”表示零个或多个任意类型的参数。
+
+> **throws-pattern**：指定方法声明抛出的异常，支持通配符，该部分可以省略。
+
+> 例如下面几个execution表达式：
+
+```
+//匹配任意public方法的执行。
+execution(public * *(..))
+//匹配任意方法名以set开始的方法。
+execution(* set*(..))
+//匹配AccountService里定义的任意方法的执行。
+execution(* org.hb.AccountService.*(..))
+//匹配Service包中任意类的任意方法的执行。
+execution(* org.hb.service.*.*(..))
+```

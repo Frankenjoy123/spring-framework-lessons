@@ -12,9 +12,12 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <aop:aspectj-autoproxy />
 
+    <!--使用jdk proxy-->
     <bean id="testBean" class="com.aop.demo.TestBean"/>
     <bean class="com.aop.demo.AspectJTest"/>
 
-
+    <!--使用cglib proxy-->
+    <bean id="userService" class="com.aop.demo.service.UserServiceImpl"/>
+    <bean class="com.aop.demo.UserServiceAspect"/>
 
 </beans>

@@ -1,5 +1,6 @@
 package com.aop.demo;
 
+import com.aop.demo.service.UserService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -12,6 +13,9 @@ public class Main {
 
         TestBean testBean = (TestBean) context.getBean("testBean");
         testBean.test();
+
+        UserService userService = (UserService) context.getBean("userService");
+        userService.add();
 
     }
 }
